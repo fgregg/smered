@@ -1,0 +1,24 @@
+<configuration>
+      <options>
+        <allDedup value="true" />
+        <burnIn value="100" />
+	<thinIterations value="50" />
+	<innerIterations value = "100000" />
+	<maxOuterIterations value = "10011" />
+      </options>
+
+      <schema>
+        <field name="SEQ" type="KEY" />
+        <field name="SEX" type="VAR" />
+        <field name="DOB_DAY" type="VAR" />
+        <field name="DOB_MONTH" type="VAR" />
+	<field name="DOB_YEAR" type="VAR" />
+	<field name="REGOFF" type="VAR" />
+	<field name="STATE" type="VAR" />
+      </schema>
+
+      <blocking-fields>
+        <field name="SEX" />
+	<field name="DOB_YEAR" />
+      </blocking-fields>
+    </configuration>

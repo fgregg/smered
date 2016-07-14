@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:simpleType name="fieldType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="KEY" />
+            <xs:enumeration value="VAR" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:element name="configuration">
+        <xs:complexType>
+            <xs:all>
+                <xs:element name="options" minOccurs="0">
+                    <xs:complexType>
+                        <xs:all>
+                            <xs:element name="allDedup" minOccurs="0">
+                                <xs:complexType>
+                                    <xs:attribute name="value" type="xs:boolean" use="required" />
+                                </xs:complexType>
+                            </xs:element>
+
+                            <xs:element name="innerIterations" minOccurs="0">
+                                <xs:complexType>
+                                    <xs:attribute name="value" type="xs:positiveInteger" use="required" />
+                                </xs:complexType>
+                            </xs:element>
+
+                            <xs:element name="thinIterations" minOccurs="0">
+                                <xs:complexType>
+                                    <xs:attribute name="value" type="xs:positiveInteger" use="required" />
+                                </xs:complexType>
+                            </xs:element>
+
+                            <xs:element name="burnIn" minOccurs="0">
+                                <xs:complexType>
+                                    <xs:attribute name="value" type="xs:positiveInteger" use="required" />
+                                </xs:complexType>
+                            </xs:element>
+
+                            <xs:element name="maxOuterIterations" minOccurs="0">
+                                <xs:complexType>
+                                    <xs:attribute name="value" type="xs:positiveInteger" use="required" />
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:all>
+                    </xs:complexType>
+                </xs:element>
+
+                <xs:element name="schema">
+                    <xs:complexType>
+                        <xs:sequence minOccurs="1" maxOccurs="unbounded">
+                            <xs:element name="field">
+                                <xs:complexType>
+                                    <xs:attribute name="name" type="xs:string" use="required" />
+                                    <xs:attribute name="type" type="fieldType" use="required" />
+                                    <xs:attribute name="distortionParam" type="xs:decimal" />
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+
+                <xs:element name="blocking-fields" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence maxOccurs="unbounded">
+                            <xs:element name="field">
+                                <xs:complexType>
+                                    <xs:attribute name="name" type="xs:string" use="required" />
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+
+            </xs:all>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

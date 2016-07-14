@@ -1,0 +1,55 @@
+<project name="MHSampler" default="dist" basedir=".">
+    <description>
+        A Metropolis-Hastings sampler for a Bayesian record linkage model.
+    </description>
+
+  <!-- set global properties for this build -->
+  <property name="src" location="src"/>
+  <property name="build" location="build"/>
+  <property name="dist"  location="dist"/>
+  <property name="lib" location="lib"/>
+  <property name="classpath" value="${lib}/mallet.jar:${lib}/mallet-deps.jar"/>
+  <property name="allDeDup" value="true" />
+
+  <target name="init">
+    <!-- Create the build directory structure used by compile -->
+    <mkdir dir="${build}"/>
+  </target>
+
+  <target name="compile" depends="init"
+        description="compile the source " >
+    <!-- Compile the java code from ${src} into ${build} -->
+    <javac srcdir="${src}" destdir="${build}" classpath="${classpath}"
+           includeantruntime="false"/>
+  </target>
+
+  <target name="dist" depends="compile"
+        description="generate the distribution" >
+
+    <!-- Put everything in ${build} into the MHSampler.jar file -->
+    <jar jarfile="MHSampler.jar" basedir="${build}"/>
+  </target>
+
+  <target name="clean"
+        description="clean up" >
+    <!-- Deletes files created by building the program -->
+    <delete dir="${build}"/>
+    <delete dir="${dist}"/>
+    <delete file="MHSampler.jar"/>
+  </target>
+
+  <target name="run">
+      <mkdir dir="samples"/>
+
+      <java classname="MHSampler_beka2_matches_dupflex" 
+          classpath="${classpath}:MHSampler.jar" 
+          fork="true">
+          <arg value="${allDeDup}"/>
+      </java>
+  </target>
+
+  <target name="cleanAll" depends="clean">
+      <!-- Delete files created by building and running the program -->
+      <delete dir="samples"/>
+  </target>
+</project>

@@ -1,0 +1,54 @@
+# Bayesian record linkage
+
+This repository builds a program to perform Bayesian record linkage using the model described in a forthcoming paper (ref. when available). The source code comes with an [ant](http://ant.apache.org) build script. To compile the program simply run 'ant' from the base directory. This will create an executable jar file named MHSampler.jar. You can then run the program by calling
+
+    > java -jar MHSampler.jar CONFIG_FILE FILE FILE ...
+
+where the first command-line argument, `CONFIG_FILE`, is an XML configuration file and the remaining command-line arguments are whitespace-delimited data files that you wish to link. You should supply at least two files to link. For example:
+
+    > java -jar MHSampler.jar config.xml *.dat
+
+(assuming there are at least two `.dat` files in the current directory).
+
+## Configuration file format
+
+The configuration file is an XML file with a top-level `<configuration>` element which contains `<options>`, `<schema>`, and `<blocking-fields>` elements.
+
+The `<options>` element is optional. If present, it contains elements corresponding to the specific options you wish to set. Options are set using the `value` attribute. Supported options are:
+
+* `<allDedup>`, boolean, if true then all files are assumed to be deduplicated (default: false).
+* `<innerIterations>`, positive integer, number of split-merge (MH) steps per outer iteration (default: 10,000).
+* `<thinIterations>`, positive integer, write output every so many Gibbs iterations (default: 100).
+* `<burnIn>`, positive integer, begin taking averages only after this many Gibbs iterations (default 5,000).
+* `<maxOuterIterations>`, positive integer, number of Gibb's iterations (default: 1,005,001).
+
+For example, to specify a burn-in of 7,000, you would write
+
+    <options>
+        <burnIn value="7000" />
+        <!-- additional options ... -->
+    </options>
+
+The `<schema>` element contains a number of `<field>` elements corresponding to the fields in the files you wish to match. Each `<field>` element has a `name` and `type` attribute. The `type` must be one of `KEY` or `VAR`. There can be at most one field of type `KEY` and, if present, it must be the first field. The `<schema>` element is required.
+
+The `<blocking-fields>` element is optional, and consists of a number of `<field>` elements. Each `<field>` element must have a `name` attribute, and the names given should correspond to names of fields in the `<schema>`.
+
+Here is a complete example configuration file:
+
+    <configuration>
+      <options>
+        <allDedup value="true" />
+        <burnIn value="7000" />
+      </options>
+
+      <schema>
+        <field name="ID" type="KEY" />
+        <field name="Department" type="VAR" />
+        <field name="Occupation" type="VAR" />
+        <field name="Office" type="VAR" />
+      </schema>
+
+      <blocking-fields>
+        <field name="Office" />
+      </blocking-fields>
+    </configuration>
